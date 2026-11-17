@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import { BottomTabBar } from "@/components/BottomTabBar";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 
 /*
@@ -24,6 +25,14 @@ export const metadata: Metadata = {
   description:
     "Your fridge's eat-me-first list — before it rots. 先吃我：按保质期区间排出库存。",
   applicationName: "EatMeFirst",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icon-192.png", sizes: "192x192", type: "image/png" }],
+  },
   appleWebApp: {
     capable: true,
     title: "EatMeFirst",
@@ -51,6 +60,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <BottomTabBar />
           </Suspense>
         </div>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

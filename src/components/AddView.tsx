@@ -157,6 +157,8 @@ export function AddView() {
 
   function buildItem(): InventoryItem | null {
     if (mode === "catalog" && food) {
+      const min = Math.max(0, Math.min(shelfDays[0], shelfDays[1]));
+      const max = Math.max(shelfDays[0], shelfDays[1]);
       return {
         id: newItemId(),
         foodId: food.id,
@@ -165,7 +167,11 @@ export function AddView() {
         unit,
         storage,
         boughtAt,
-        shelfDays: resolveShelfDays(food, storage, food.category),
+        // Prefer form state (tracks storage switches); fall back to resolver.
+        shelfDays:
+          shelfDays[0] >= 0 && shelfDays[1] >= 0
+            ? [min, max]
+            : resolveShelfDays(food, storage, food.category),
         opened: false,
         remaining: 1,
         status: "active",
@@ -322,7 +328,7 @@ export function AddView() {
                   key={chip.id}
                   type="button"
                   onClick={() => selectFood(chip)}
-                  className="shrink-0 rounded-full border border-[var(--border)] bg-[var(--accent-soft)] px-3.5 py-2 text-sm font-medium text-[var(--foreground)] transition-transform active:scale-[0.97]"
+                  className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-[var(--border)] bg-[var(--accent-soft)] px-3.5 py-2 text-sm font-medium text-[var(--foreground)] transition-transform active:scale-[0.97]"
                 >
                   {chip.nameZh}
                 </button>
@@ -514,7 +520,7 @@ export function AddView() {
             </p>
           ) : null}
 
-          <div className="flex flex-col gap-2 pt-1">
+          <div className="sticky bottom-16 z-10 -mx-4 flex flex-col gap-2 border-t border-[var(--border)] bg-[var(--surface)]/95 px-4 py-3 backdrop-blur-sm">
             <button
               type="submit"
               className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--accent)] px-6 text-base font-semibold text-white shadow-sm transition-transform active:scale-[0.98]"
