@@ -17,7 +17,8 @@ const listeners = new Set<Listener>();
 const wasteListeners = new Set<WasteListener>();
 
 /** Stable snapshot refs for useSyncExternalStore (Object.is identity). */
-const EMPTY_ITEMS: InventoryItem[] = [];
+export const EMPTY_INVENTORY: InventoryItem[] = [];
+const EMPTY_ITEMS = EMPTY_INVENTORY;
 let cachedItems: InventoryItem[] | null = null;
 let cachedWasteCount: number | null = null;
 let cachedWasteMonth: string | null = null;
