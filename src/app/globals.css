@@ -8,6 +8,16 @@
   --border: #d7e3d8;
   --accent: #2e7d32;
   --accent-soft: #e8f5e9;
+  /* Urgency (PLAN §4) — red / yellow / green */
+  --urgency-red: #c62828;
+  --urgency-red-soft: #fdecea;
+  --urgency-red-text: #8e1b1b;
+  --urgency-yellow: #f9a825;
+  --urgency-yellow-soft: #fff8e1;
+  --urgency-yellow-text: #7a5a00;
+  --urgency-green: #2e7d32;
+  --urgency-green-soft: #e8f5e9;
+  --urgency-green-text: #1b5e20;
 }
 
 @theme inline {

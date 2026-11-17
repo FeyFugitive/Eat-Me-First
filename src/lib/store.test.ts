@@ -2,9 +2,15 @@ import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import {
   INVENTORY_STORAGE_KEY,
+  WASTE_STORAGE_KEY,
   addItem,
   clearInventory,
+  clearWasteStats,
   getInventory,
+  getMonthlyWasteCount,
+  markEaten,
+  markHalfLeft,
+  markThrown,
   newItemId,
   removeItem,
   updateItem,
@@ -59,6 +65,7 @@ describe("inventory store (localStorage)", () => {
     globalThis.window = { localStorage: storage };
     globalThis.localStorage = storage;
     clearInventory();
+    clearWasteStats();
   });
 
   afterEach(() => {
@@ -97,5 +104,28 @@ describe("inventory store (localStorage)", () => {
     assert.ok(raw);
     const parsed = JSON.parse(raw!) as InventoryItem[];
     assert.equal(parsed[0].name, "鸡胸肉");
+  });
+
+  it("markEaten / markHalfLeft / markThrown update status and waste", () => {
+    addItem(sampleItem({ id: "half-1" }));
+    addItem(sampleItem({ id: "eat-1", name: "生菜" }));
+    addItem(sampleItem({ id: "toss-1", name: "豆芽" }));
+
+    assert.ok(markHalfLeft("half-1"));
+    assert.equal(getInventory().find((i) => i.id === "half-1")?.remaining, 0.5);
+    assert.equal(getInventory().find((i) => i.id === "half-1")?.status, "active");
+
+    assert.ok(markEaten("eat-1"));
+    assert.equal(getInventory().find((i) => i.id === "eat-1")?.status, "eaten");
+
+    const now = new Date(2026, 10, 17);
+    assert.equal(getMonthlyWasteCount(now), 0);
+    assert.ok(markThrown("toss-1", now));
+    assert.equal(getInventory().find((i) => i.id === "toss-1")?.status, "thrown");
+    assert.equal(getMonthlyWasteCount(now), 1);
+
+    const wasteRaw = window.localStorage.getItem(WASTE_STORAGE_KEY);
+    assert.ok(wasteRaw);
+    assert.equal(JSON.parse(wasteRaw!)["2026-11"], 1);
   });
 });
