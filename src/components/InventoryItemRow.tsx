@@ -113,7 +113,7 @@ function ActionButton({
   disabled?: boolean;
 }) {
   const base =
-    "rounded-lg px-1.5 py-2 text-center text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40";
+    "min-h-11 rounded-lg px-1.5 py-2 text-center text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40";
   const styles =
     variant === "danger"
       ? "bg-[var(--urgency-red-soft)] text-[var(--urgency-red-text)] active:brightness-95"
